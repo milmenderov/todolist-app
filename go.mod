@@ -1,8 +1,13 @@
-module github.com/milmenderov/todolist-app
+module todolist-app
 
 go 1.20
 
-require github.com/gin-gonic/gin v1.9.1
+replace github.com/milmenderov/todolist-app => ./
+
+require (
+	github.com/gin-gonic/gin v1.9.1
+	github.com/milmenderov/todolist-app v0.0.0-00010101000000-000000000000
+)
 
 require (
 	github.com/bytedance/sonic v1.10.0 // indirect
