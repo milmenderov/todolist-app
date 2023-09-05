@@ -1,6 +1,7 @@
-.PHONY: dc run test lint
+.PHONY: dc down
 
 dc:
-	docker-compose -f ./.docker/docker-compose.yml up -d
+	docker-compose -f ./.docker/docker-compose.yml up --build -d
 
-
+down:
+	docker-compose -f ./.docker/docker-compose.yml down -v

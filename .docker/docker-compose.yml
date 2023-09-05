@@ -18,3 +18,22 @@ services:
           memory: 1Gb
     ports:
       - "5432:5432"
+  todolist-back:
+    build: ../.
+    container_name: todolist-back
+    ports:
+      - 80:8000
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512Mb'
+    environment:
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      DB_NAME: "postgres"
+      DB_USERNAME: "postgres"
+      DB_PASSWORD: "qwerty"
+      APP_PORT: "8000"
+    depends_on: [ postgres ]
+
