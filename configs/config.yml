@@ -1,8 +1,9 @@
-port: "${APP_PORT}"
+port: "8000"
 
 db:
-  username:  "${DB_USER}"
-  host: "${DB_HOST}"
-  port: "${DB_PORT}"
-  dbname: "${DB_NAME}"
+  username:
+  host:
+  port:
+  dbname:
+  password:
   sslmode: "disable"

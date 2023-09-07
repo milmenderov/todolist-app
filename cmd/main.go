@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	_ "github.com/lib/pq"
 	"github.com/milmenderov/todolist-app"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -31,10 +32,10 @@ func main() {
 	}
 
 	db, err := repository.NewPostgresDB(repository.Config{
-		Host:     viper.GetString("db.host"),
-		Port:     viper.GetString("db.port"),
-		Username: viper.GetString("db.username"),
-		DBName:   viper.GetString("db.dbname"),
+		Host:     os.Getenv("DB_HOST"),
+		Port:     os.Getenv("DB_PORT"),
+		Username: os.Getenv("DB_USER"),
+		DBName:   os.Getenv("DB_NAME"),
 		SSLMode:  viper.GetString("db.sslmode"),
 		Password: os.Getenv("DB_PASSWORD"),
 	})

@@ -5,16 +5,17 @@ services:
       context: ../.
       dockerfile: Dockerfile
     command: ./todo-app
+   # command: sleep 300
     ports:
       - 8000:8000
     depends_on:
       - db
     environment:
-      - DB_PASSWORD=qwerty
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_NAME=postgres
+      - DB_PASSWORD=qwerty
       - APP_PORT=8000
 
   db:
