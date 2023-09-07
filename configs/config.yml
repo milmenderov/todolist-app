@@ -1,8 +1,8 @@
-port: "8000"
+port: "${APP_PORT}"
 
 db:
-  username: "postgres"
-  host: "db"
-  port: "5432"
-  dbname: "postgres"
+  username:  "${DB_USER}"
+  host: "${DB_HOST}"
+  port: "${DB_PORT}"
+  dbname: "${DB_NAME}"
   sslmode: "disable"
