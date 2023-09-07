@@ -1,7 +1,8 @@
-.PHONY: dc down
+.PHONY: dc down run
 
-dc:
+build:
 	docker-compose -f ./.docker/docker-compose.yml up --build -d
-
+run:
+	docker-compose -f ./.docker/docker-compose.yml up
 down:
 	docker-compose -f ./.docker/docker-compose.yml down -v

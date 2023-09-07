@@ -1,39 +1,23 @@
 version: "3.9"
 services:
-  postgres:
-    image: postgres:15
-    container_name: pg-local
-    restart: always
-    environment:
-      POSTGRES_DB: "postgres"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "qwerty"
-      PGDATA: "/var/lib/postgresql/data/pgdata"
-    volumes:
-      - ./pg_data:/var/lib/postgresql/data
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 1Gb
+  todo-app:
+    build:
+      context: /home/maxim/golandproject/todolist-app
+      dockerfile: Dockerfile
+    command: ./todo-app
     ports:
-      - "5432:5432"
-  todolist-back:
-    build: ../.
-    container_name: todolist-back
-    ports:
-      - 80:8000
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: '512Mb'
+      - 8000:8000
+    depends_on:
+      - db
     environment:
-      DB_HOST: "postgres"
-      DB_PORT: "5432"
-      DB_NAME: "postgres"
-      DB_USERNAME: "postgres"
-      DB_PASSWORD: "qwerty"
-      APP_PORT: "8000"
-    depends_on: [ postgres ]
+      - DB_PASSWORD=qwerty
 
+  db:
+    restart: always
+    image: postgres:latest
+    volumes:
+      - ./.database/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=qwerty
+    ports:
+      - 5432:5432
