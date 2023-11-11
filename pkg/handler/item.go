@@ -11,17 +11,18 @@ import (
 // @Summary      Create todo items
 // @Security     ApiKeyAuth
 // @Tags         items
-// @Description  create todolist_app items
+// @Description  Create new items in a specific todo list
 // @ID           create-items
 // @Accept       json
 // @Produce      json
-// @Param        input  body    todolist_app.TodoItem  true  "list info"
-// @Success      200    {object}  map[string]interface{}  "id of the created item"
-// @Failure      400    {object}  errorResponse           "Bad Request"
-// @Failure      404    {object}  errorResponse           "Not Found"
-// @Failure      500    {object}  errorResponse           "Internal Server Error"
-// @Failure      default {object}  errorResponse          "Default Error"
-// @Router       /api/items [post]
+// @Param        id     path    int                      true  "Todo List ID"
+// @Param        input  body    todolist_app.TodoItem    true  "Item Info"
+// @Success      200    {object} map[string]int          "ID of the created item"
+// @Failure      400    {object} errorResponse           "Invalid list ID parameter or bad request data"
+// @Failure      401    {object} errorResponse           "Authentication error"
+// @Failure      404    {object} errorResponse           "Todo list not found"
+// @Failure      500    {object} errorResponse           "Internal server error"
+// @Router       /api/lists/{id}/items [post]
 func (h *Handler) createItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -65,7 +66,7 @@ func (h *Handler) createItem(c *gin.Context) {
 // @Failure      404     {object}  errorResponse            "Not Found"
 // @Failure      500     {object}  errorResponse            "Internal Server Error"
 // @Failure      default {object}  errorResponse            "Default Error"
-// @Router       /api/items/{listId} [get]
+// @Router       /api/lists/{id}/items [get]
 func (h *Handler) getAllItems(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
