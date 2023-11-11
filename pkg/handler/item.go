@@ -58,7 +58,7 @@ func (h *Handler) createItem(c *gin.Context) {
 // @ID           get-all-items
 // @Accept       json
 // @Produce      json
-// @Param        listId  path  int  true  "List ID"
+// @Param        id  path      int  true  "List ID"
 // @Success      200     {object}  []todolist_app.TodoItem  "List of Todo Items"
 // @Failure      400     {object}  errorResponse            "Bad Request"
 // @Failure      404     {object}  errorResponse            "Not Found"
