@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -31,7 +30,6 @@ func (h *Handler) createItem(c *gin.Context) {
 
 	listId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		fmt.Println("listId: ", listId, "err: ", err)
 		newErrorResponse(c, http.StatusBadRequest, "invalid list id param")
 		return
 	}
