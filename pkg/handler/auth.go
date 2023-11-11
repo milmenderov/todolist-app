@@ -6,6 +6,11 @@ import (
 	todolist_app "todolist-app"
 )
 
+type signInInput struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
 // @Summary		SignUp
 // @Tags			auth
 // @Description	create account
@@ -35,11 +40,6 @@ func (h *Handler) signUp(c *gin.Context) {
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"id": id,
 	})
-}
-
-type signInInput struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
 }
 
 // @Summary		SignIn

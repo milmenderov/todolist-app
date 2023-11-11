@@ -1,25 +1,27 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	todolist_app "todolist-app"
 )
 
-// @Summary		Create todo items
-// @Security		ApiKeyAuth
-// @Tags			items
-// @Description	create todolist_app items
-// @ID				create-items
-// @Accept			json
-// @Produce		json
-// @Param			input	body		todolist_app.TodoItem	true	"list info"
-// @Success		200		{integer}	integer			1
-// @Failure		400,404	{object}	errorResponse
-// @Failure		500		{object}	errorResponse
-// @Failure		default	{object}	errorResponse
-// @Router			/api/items [post]
+// @Summary      Create todo items
+// @Security     ApiKeyAuth
+// @Tags         items
+// @Description  create todolist_app items
+// @ID           create-items
+// @Accept       json
+// @Produce      json
+// @Param        input  body    todolist_app.TodoItem  true  "list info"
+// @Success      200    {object}  map[string]interface{}  "id of the created item"
+// @Failure      400    {object}  errorResponse           "Bad Request"
+// @Failure      404    {object}  errorResponse           "Not Found"
+// @Failure      500    {object}  errorResponse           "Internal Server Error"
+// @Failure      default {object}  errorResponse          "Default Error"
+// @Router       /api/items [post]
 func (h *Handler) createItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -28,6 +30,7 @@ func (h *Handler) createItem(c *gin.Context) {
 
 	listId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
+		fmt.Println("listId: ", listId, "err: ", err)
 		newErrorResponse(c, http.StatusBadRequest, "invalid list id param")
 		return
 	}
@@ -49,18 +52,20 @@ func (h *Handler) createItem(c *gin.Context) {
 	})
 }
 
-// @Summary		Get All Items
-// @Security		ApiKeyAuth
-// @Tags			items
-// @Description	get all lists
-// @ID				get-all-items
-// @Accept			json
-// @Produce		json
-// @Success		200		{object}	getAllListsResponse
-// @Failure		400,404	{object}	errorResponse
-// @Failure		500		{object}	errorResponse
-// @Failure		default	{object}	errorResponse
-// @Router			/api/items [get]
+// @Summary      Get All Items
+// @Security     ApiKeyAuth
+// @Tags         items
+// @Description  get all items for a specified list
+// @ID           get-all-items
+// @Accept       json
+// @Produce      json
+// @Param        listId  path  int  true  "List ID"
+// @Success      200     {object}  []todolist_app.TodoItem  "List of Todo Items"
+// @Failure      400     {object}  errorResponse            "Bad Request"
+// @Failure      404     {object}  errorResponse            "Not Found"
+// @Failure      500     {object}  errorResponse            "Internal Server Error"
+// @Failure      default {object}  errorResponse            "Default Error"
+// @Router       /api/items/{listId} [get]
 func (h *Handler) getAllItems(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -82,18 +87,20 @@ func (h *Handler) getAllItems(c *gin.Context) {
 	c.JSON(http.StatusOK, items)
 }
 
-// @Summary		Get Items By Id
-// @Security		ApiKeyAuth
-// @Tags			items
-// @Description	get item by id
-// @ID				get-item-by-id
-// @Accept			json
-// @Produce		json
-// @Success		200		{object}	todolist_app.ListItem
-// @Failure		400,404	{object}	errorResponse
-// @Failure		500		{object}	errorResponse
-// @Failure		default	{object}	errorResponse
-// @Router			/api/items/:id [get]
+// @Summary      Get Items By Id
+// @Security     ApiKeyAuth
+// @Tags         items
+// @Description  get item by id
+// @ID           get-item-by-id
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Item ID"
+// @Success      200  {object}  todolist_app.ListItem  "The requested Todo Item"
+// @Failure      400  {object}  errorResponse           "Bad Request"
+// @Failure      404  {object}  errorResponse           "Not Found"
+// @Failure      500  {object}  errorResponse           "Internal Server Error"
+// @Failure      default {object}  errorResponse        "Default Error"
+// @Router       /api/items/{id} [get]
 func (h *Handler) getItemById(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -116,18 +123,20 @@ func (h *Handler) getItemById(c *gin.Context) {
 
 }
 
-// @Summary		Update Item
-// @Security		ApiKeyAuth
-// @Tags			items
-// @Description		update by id
-// @ID				update-item-by-id
-// @Accept			json
-// @Produce		json
-// @Success		200		{object}	todolist_app.ListItem
-// @Failure		400,404	{object}	errorResponse
-// @Failure		500		{object}	errorResponse
-// @Failure		default	{object}	errorResponse
-// @Router			/api/items/:id [post]
+// @Summary     Update Item
+// @Security    ApiKeyAuth
+// @Tags        items
+// @Description update by id
+// @ID          update-item-by-id
+// @Accept      json
+// @Produce     json
+// @Param       id   path      int  true  "Item ID"
+// @Success     200  {object}  todolist_app.ListItem
+// @Failure     400  {object}  errorResponse
+// @Failure     404  {object}  errorResponse
+// @Failure     500  {object}  errorResponse
+// @Failure     default {object}  errorResponse
+// @Router      /api/items/{id} [put]
 func (h *Handler) updateItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -154,18 +163,20 @@ func (h *Handler) updateItem(c *gin.Context) {
 	c.JSON(http.StatusOK, statusResponse{"ok"})
 }
 
-// @Summary		Delete Items
-// @Security		ApiKeyAuth
-// @Tags			items
-// @Description		delete item by id
-// @ID				delete-item-by-id
-// @Accept			json
-// @Produce		json
-// @Success		200		{object}	todolist_app.ListItem
-// @Failure		400,404	{object}	errorResponse
-// @Failure		500		{object}	errorResponse
-// @Failure		default	{object}	errorResponse
-// @Router			/api/items/:id [delete]
+// @Summary      Delete Items
+// @Security     ApiKeyAuth
+// @Tags         items
+// @Description  delete item by id
+// @ID           delete-item-by-id
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Item ID"
+// @Success      200  {object}  statusResponse          "Success Response"
+// @Failure      400  {object}  errorResponse           "Bad Request"
+// @Failure      404  {object}  errorResponse           "Not Found"
+// @Failure      500  {object}  errorResponse           "Internal Server Error"
+// @Failure      default {object}  errorResponse        "Default Error"
+// @Router       /api/items/{id} [delete]
 func (h *Handler) deleteItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {

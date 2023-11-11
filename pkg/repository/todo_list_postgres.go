@@ -68,6 +68,7 @@ func (r *TodoListPostgres) Delete(userId, listId int) error {
 
 	return err
 }
+
 func (r *TodoListPostgres) Update(userId, listId int, input todolist_app.UpdateListInput) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)

@@ -7,20 +7,24 @@ import (
 	todolist_app "todolist-app"
 )
 
-//	@Summary		Create todo list
-//	@Security		ApiKeyAuth
-//	@Tags			lists
-//	@Description	create todolist_app list
-//	@ID				create-list
-//	@Accept			json
-//	@Produce		json
-//	@Param			input	body		todolist_app.TodoList	true	"list info"
-//	@Success		200		{integer}	integer			1
-//	@Failure		400,404	{object}	errorResponse
-//	@Failure		500		{object}	errorResponse
-//	@Failure		default	{object}	errorResponse
-//	@Router			/api/lists [post]
+type getAllListsResponse struct {
+	Data []todolist_app.TodoList `json:"data"`
+}
 
+// @Summary      Create todo list
+// @Security     ApiKeyAuth
+// @Tags         lists
+// @Description  Create a new todo list
+// @ID           create-list
+// @Accept       json
+// @Produce      json
+// @Param        input  body      todolist_app.TodoList  true  "List Info"
+// @Success      200    {object}  map[string]int        "id"
+// @Failure      400    {object}  errorResponse         "Invalid input"
+// @Failure      404    {object}  errorResponse         "Not Found"
+// @Failure      500    {object}  errorResponse         "Internal Server Error"
+// @Failure      default {object}  errorResponse         "Unexpected error"
+// @Router       /api/lists [post]
 func (h *Handler) createList(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -43,22 +47,17 @@ func (h *Handler) createList(c *gin.Context) {
 	})
 }
 
-type getAllListsResponse struct {
-	Data []todolist_app.TodoList `json:"data"`
-}
-
-// @Summary		Get All Lists
-// @Security		ApiKeyAuth
-// @Tags			lists
-// @Description	get all lists
-// @ID				get-all-lists
-// @Accept			json
-// @Produce		json
-// @Success		200		{object}	getAllListsResponse
-// @Failure		400,404	{object}	errorResponse
-// @Failure		500		{object}	errorResponse
-// @Failure		default	{object}	errorResponse
-// @Router			/api/lists [get]
+// @Summary      Get All Lists
+// @Security     ApiKeyAuth
+// @Tags         lists
+// @Description  Retrieve all todo lists created by the authenticated user
+// @ID           get-all-lists
+// @Accept       json
+// @Produce      json
+// @Success      200 {object} getAllListsResponse "List of all todo lists"
+// @Failure      401 {object} errorResponse      "Authentication error"
+// @Failure      500 {object} errorResponse      "Internal server error"
+// @Router       /api/lists [get]
 func (h *Handler) getAllLists(c *gin.Context) {
 
 	userId, err := getUserId(c)
@@ -77,18 +76,20 @@ func (h *Handler) getAllLists(c *gin.Context) {
 	})
 }
 
-// @Summary		Get List By Id
-// @Security		ApiKeyAuth
-// @Tags			lists
-// @Description	get list by id
-// @ID				get-list-by-id
-// @Accept			json
-// @Produce		json
-// @Success		200		{object}	todolist_app.ListItem
-// @Failure		400,404	{object}	errorResponse
-// @Failure		500		{object}	errorResponse
-// @Failure		default	{object}	errorResponse
-// @Router			/api/lists/:id [get]
+// @Summary      Get List By Id
+// @Security     ApiKeyAuth
+// @Tags         lists
+// @Description  Retrieve a specific todo list by its ID
+// @ID           get-list-by-id
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Todo List ID"
+// @Success      200  {object}  todolist_app.ListItem "Details of the specific todo list"
+// @Failure      400  {object}  errorResponse         "Invalid ID parameter"
+// @Failure      401  {object}  errorResponse         "Authentication error"
+// @Failure      404  {object}  errorResponse         "Todo list not found"
+// @Failure      500  {object}  errorResponse         "Internal server error"
+// @Router       /api/lists/{id} [get]
 func (h *Handler) getListById(c *gin.Context) {
 
 	userId, err := getUserId(c)
@@ -112,18 +113,21 @@ func (h *Handler) getListById(c *gin.Context) {
 
 }
 
-// @Summary		Update List
-// @Security		ApiKeyAuth
-// @Tags			lists
-// @Description		update by id
-// @ID				update-list-by-id
-// @Accept			json
-// @Produce		json
-// @Success		200		{object}	todolist_app.ListItem
-// @Failure		400,404	{object}	errorResponse
-// @Failure		500		{object}	errorResponse
-// @Failure		default	{object}	errorResponse
-// @Router			/api/lists/:id [post]
+// @Summary      Update List
+// @Security     ApiKeyAuth
+// @Tags         lists
+// @Description  Update a specific todo list by its ID
+// @ID           update-list-by-id
+// @Accept       json
+// @Produce      json
+// @Param        id    path      int                        true "Todo List ID"
+// @Param        input body      todolist_app.UpdateListInput true "Update data"
+// @Success      200   {object}  statusResponse             "List updated successfully"
+// @Failure      400   {object}  errorResponse              "Invalid request parameters"
+// @Failure      401   {object}  errorResponse              "Authentication error"
+// @Failure      404   {object}  errorResponse              "Todo list not found"
+// @Failure      500   {object}  errorResponse              "Internal server error"
+// @Router       /api/lists/{id} [put]
 func (h *Handler) updateList(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -150,18 +154,20 @@ func (h *Handler) updateList(c *gin.Context) {
 	c.JSON(http.StatusOK, statusResponse{"ok"})
 }
 
-// @Summary		Delete List
-// @Security		ApiKeyAuth
-// @Tags			lists
-// @Description		delete list by id
-// @ID				delete-list-by-id
-// @Accept			json
-// @Produce		json
-// @Success		200		{object}	todolist_app.ListItem
-// @Failure		400,404	{object}	errorResponse
-// @Failure		500		{object}	errorResponse
-// @Failure		default	{object}	errorResponse
-// @Router			/api/lists/:id [delete]
+// @Summary      Delete List
+// @Security     ApiKeyAuth
+// @Tags         lists
+// @Description  Delete a specific todo list by its ID
+// @ID           delete-list-by-id
+// @Accept       json
+// @Produce      json
+// @Param        id    path      int  true  "Todo List ID"
+// @Success      200   {object}  statusResponse "List deleted successfully"
+// @Failure      400   {object}  errorResponse  "Invalid ID parameter"
+// @Failure      401   {object}  errorResponse  "Authentication error"
+// @Failure      404   {object}  errorResponse  "Todo list not found"
+// @Failure      500   {object}  errorResponse  "Internal server error"
+// @Router       /api/lists/{id} [delete]
 func (h *Handler) deleteList(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
