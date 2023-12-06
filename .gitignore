@@ -1,4 +1,7 @@
 .idea
 .docker/pg_data
 .docker/.database
+.docker/grafana-data
+.docker/prometheus-data
 docs/
+frontend/

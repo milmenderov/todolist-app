@@ -3,6 +3,7 @@ package handler
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
 	"strings"
 )
@@ -48,4 +49,16 @@ func getUserId(c *gin.Context) (int, error) {
 	}
 
 	return idInt, nil
+}
+
+func prometheusMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		route := c.FullPath()
+		timer := prometheus.NewTimer(httpDuration.WithLabelValues(route))
+		httpRequestsTotal.WithLabelValues(route).Inc()
+
+		c.Next()
+
+		timer.ObserveDuration()
+	}
 }
